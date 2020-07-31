@@ -1,0 +1,77 @@
+{% extends "layout/base-login.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}   
+{% load static %}
+<div class="row py-4 bg-fixed">
+    <div class="col-12">
+        <div class="text-center">
+            <a class="btn btn-sm btn-secondary" href="/home">Back To Home</a>
+        </div>
+    </div>
+</div>
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-2">
+                        <!-- <i class="feather icon-unlock auth-icon"></i> -->
+                        <a href="#"><img src="{% static  'assets/images/icon/custom2.png' %}" alt="logo"></a>
+                    </div>
+                    <h3 class="mb-3">Login</h3>
+
+                    <span class="mb-0 text-muted">
+                    {% if messages %}
+                        <div class="span12">
+                            {% for message in messages %}
+                                <div class="alert {{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %} 
+                    </span>
+
+                    <br />
+                    <br />
+
+                    <form role="form" method="post" action="">
+
+                        {% csrf_token %}                   
+
+                        <div class="input-group mb-3">
+                            {{ form.username }}
+                        </div>
+                        
+                        <div class="input-group mb-4">
+                            {{ form.password }}
+                        </div>
+                        
+                        <div class="form-group text-left">
+                            <div class="checkbox checkbox-fill d-inline">
+                                <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                                <label for="checkbox-fill-a1" class="cr"> Save Details</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary shadow-2 mb-4">Login</button>
+
+                    </form>
+
+                    <p class="mb-0 text-muted">Don’t have an account? <a href="/register" >Signup</a></p>
+                    <br />
+                    <p class="mb-2 text-muted">
+                        &copy; Copyright 2020. Developed by Audrey.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

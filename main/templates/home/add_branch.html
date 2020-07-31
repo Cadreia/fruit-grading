@@ -1,0 +1,71 @@
+{% extends "layout/base.html" %}
+
+{% block heading_content %}
+Create Branch
+{% endblock heading_content %}
+
+{% block title_content %}
+Branches
+{% endblock title_content %}
+
+{% block title_content2 %}
+Create Branch
+{% endblock title_content2 %}
+
+{% block main_content %}
+    {% load static %}
+    <!-- page title area end -->
+    <div class="main-content-inner">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 mx-auto my-3">
+                <div class="row">
+                    <!-- Textual inputs start -->
+                    <div class="col-12 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title">Add Branch</h4>
+                                {% if messages %}
+                                    <div class="span12">
+                                        {% for message in messages %}
+                                            <div class="alert alert-danger">
+                                                {{ message|safe }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <br/>
+                                <form method="post" action="/save_company">
+                                     {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="col-form-label">Name</label>
+                                        <input class="form-control" name="name" type="text" id="example-text-input"
+                                               required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="col-form-label">Name</label>
+                                        <input class="form-control" name="name" type="text" id="example-text-input"
+                                               required>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Textual inputs end -->
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    </div>
+    <!-- main content area end -->
+{% endblock %}
+{% block js_content %}
+    <script src="{% static  'assets/js/vendor/jquery-2.2.4.min.js' %}"></script>
+{% endblock %}

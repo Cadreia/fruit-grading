@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Fruit Quality Checking System - {% block title %}{% endblock %} | Grading
+    </title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Datta Able Bootstrap admin template made using Bootstrap 4 and it has huge amount of ready made feature, UI components, pages which completely fulfills any dashboard needs." />
+    <meta name="keywords" content="admin templates, bootstrap admin templates, bootstrap 4, dashboard, dashboard templets, sass admin templets, html admin templates, responsive, bootstrap admin templates free download,premium bootstrap admin templates, datta able, datta able bootstrap admin template, free admin theme, free dashboard template"/>
+    <meta name="author" content="CodedThemes"/>
+
+    <!-- Favicon icon -->
+    <link rel="icon" href="/static/assets/images/favicon.ico" type="image/x-icon">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/static/assets/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="/static/assets/css/styles2.css">
+
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="/static/assets/css/metisMenu.css">
+    <link rel="stylesheet" href="/static/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/static/assets/css/slicknav.min.css">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all"/>
+    <!-- others css -->
+    <link rel="stylesheet" href="/static/assets/css/default-css.css">
+    <link rel="stylesheet" href="/static/assets/css/responsive.css">
+    <!-- modernizr css -->
+    <script src="{/static/assets/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <!-- Specific CSS goes HERE -->
+
+	<link rel="stylesheet" href="{% static  'assets/css/open-iconic-bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/animate.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/owl.theme.default.min.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/magnific-popup.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/ionicons.min.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/bootstrap-datepicker.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/jquery.timepicker.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/flaticon.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/icomoon.css' %}">
+	<link rel="stylesheet" href="{% static  'assets/css/style.css' %}">
+    {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+
+<body>
+    
+    
+    {% block content %}{% endblock content %}
+
+    <!-- {% include 'includes/scripts.html' %} -->
+    <script src="{% static  'assets/js/jquery.min.js' %}"></script>
+    <script src="{% static  'assets/js/jquery-migrate-3.0.1.min.js' %}"></script>
+    <script src="{% static  'assets/js/popper.min.js' %}"></script>
+    <script src="{% static  'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static  'assets/js/jquery.easing.1.3.js' %}"></script>
+    <script src="{% static  'assets/js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static  'assets/js/jquery.stellar.min.js' %}"></script>
+    <script src="{% static  'assets/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static  'assets/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static  'assets/js/aos.js' %}"></script>
+    <script src="{% static  'assets/js/jquery.animateNumber.min.js' %}"></script>
+    <script src="{% static  'assets/js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static  'assets/js/scrollax.min.js' %}"></script>
+    <script src="{% static  'assets/js/google-map.js' %}"></script>
+    <script src="{% static  'assets/js/js/main.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+</body>
+</html>

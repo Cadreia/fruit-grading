@@ -1,0 +1,68 @@
+{% extends "layout/base.html" %}
+
+{% block heading_content %}
+My Companies
+{% endblock heading_content %}
+
+{% block title_content %}
+Companies
+{% endblock title_content %}
+
+{% block title_content2 %}
+View Company
+{% endblock title_content2 %}
+
+{% block main_content %}
+{% load static %}
+<div class="main-content-inner">
+    <div class="row">
+
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">View Companies</h4>
+                    {% if messages %}
+                    <div class="span12">
+                        {% for message in messages %}
+                        <div class="alert alert-success">
+                            {{ message|safe }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="data-tables datatable-dark">
+                        <table id="dataTable3" class="text-center">
+                            <thead class="text-capitalize">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Creation Date: </th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for company in companies %}
+                                <tr>
+                                    <td>{{ company.name }}</td>
+                                    <td>{{ company.created_at }}</td>
+                                    <td>
+                                        <a href="#" class="text-info mr-2"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                        <a href="#" class="text-danger ml-2"><i class="far fa-trash-alt"></i> Delete</a>
+                                        <a href="/add_branch" class="text-success ml-2"><i class="fas fa-plus-circle"></i> Add Branch</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Dark table end -->
+    </div>
+</div>
+{% endblock %}
+{% block js_content %}
+<script src="{% static  'assets/js/vendor/jquery-2.2.4.min.js' %}"></script>
+{% endblock %}

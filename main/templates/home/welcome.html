@@ -1,0 +1,114 @@
+{% extends "layout/base.html" %}
+
+{% block heading_content %}
+Let's Get Started
+{% endblock heading_content %}
+
+{% block title_content %}
+Grade
+{% endblock title_content %}
+
+{% block main_content %}
+    {% load static %}
+<div class="main-content-inner">
+                <div class="card-area">
+                    {% if messages %}
+                        <div class="span12">
+                            {% for message in messages %}
+                                <div class="alert alert-success">
+                                    {{ message|safe }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img src="{% static  'assets/images/card/uploadimage.jpg' %}" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Upload Fruit Picture</h5>
+                                    <p class="card-text">Upload fruit picture and the system will detect and run an analysis on the picture and grade the fruit as best as it can
+                                    </p>
+
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">Upload Picture</button>
+                                    <div class="modal fade" id="exampleModalLong">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Upload Picture</h5>
+
+                                            </div>
+                                            <form method="post" action="/checkFruit" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                            <div class="modal-body">
+                                                <input type="file" name="image" required>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <a  type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</a>
+                                                <button type="submit" class="btn btn-primary">Process</button>
+                                            </div>
+                                                </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img src="{% static  'assets/images/card/uploadvideo.png' %}" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Upload Fruit Video</h5>
+                                    <p class="card-text">Upload fruit video and the system will detect and run an analysis on the fruit and grade it as best as it can
+                                    </p>
+
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">Upload Video</button>
+                                    <div class="modal fade" id="exampleModalLong">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Upload Video</h5>
+
+                                            </div>
+                                            <form method="post" action="" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                            <div class="modal-body">
+                                                <input type="file" name="image" required>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <a  type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                                                <button type="submit" class="btn btn-primary">Process</button>
+                                            </div>
+                                                </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img src="{% static  'assets/images/card/webcam.jpg' %}" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Detect Using Webcam.</h5>
+                                    <p class="card-text">Webcam is used to model a CCTV in this case
+                                    </p>
+                                    <form method="post" action="/gotoCamResults">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">Open Webcam</button>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block js_content %}
+    <script src="{% static  'assets/js/vendor/jquery-2.2.4.min.js' %}"></script>
+{% endblock %}
