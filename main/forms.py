@@ -67,3 +67,30 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('name', 'surname', 'email', 'password1', 'password2')
+
+class CompanyForm(forms.Form):
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder" : "Name",                
+                "class": "form-control"
+            }
+        ))
+
+class BranchForm(forms.Form):
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder" : "Name",                
+                "class": "form-control"
+            }
+        ))
+
+class FruitForm(forms.Form):
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder" : "Name",                
+                "class": "form-control"
+            }
+        ))

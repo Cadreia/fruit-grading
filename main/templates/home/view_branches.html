@@ -1,15 +1,15 @@
 {% extends "layout/base.html" %}
 
 {% block heading_content %}
-System Users
+My Company's Branches
 {% endblock heading_content %}
 
 {% block title_content %}
-Users
+Branches
 {% endblock title_content %}
 
 {% block title_content2 %}
-All Users
+View Branches
 {% endblock title_content2 %}
 
 {% block main_content %}
@@ -20,7 +20,8 @@ All Users
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">View Users</h4>
+                    <h2 class="text-center text-capitalize my-2">{{ company.name }}</h2>
+                    <h4 class="header-title text-center">Branches</h4>
                     {% if messages %}
                     <div class="span12">
                         {% for message in messages %}
@@ -30,32 +31,39 @@ All Users
                         {% endfor %}
                     </div>
                     {% endif %}
+                    <div class="row my-2 d-flex align-items-end justify-content-end">
+                        <div class="col-md-4 col-lg-4 d-flex align-items-end justify-content-end">
+                            <a href="/add_branch/{{ company.id }}" class="btn btn-sm btn-success"><i
+                                    class="fas fa-plus-circle"></i>Add
+                                Branch</a>
+                        </div>
+                    </div>
+
                     <div class="data-tables datatable-dark">
                         <table id="dataTable3" class="text-center">
                             <thead class="text-capitalize">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Email Address</th>
-                                    <th>Role</th>
-                                    <th>Joined Date</th>
+                                    <th>Creation Date: </th>
                                     <th>Action</th>
+
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for user in users %}
+                            <tbody class="text-capitalize">
+                                {% for branch in branches %}
                                 <tr>
-                                    <td class="text-capitalize">{{ user.first_name }}</td>
-                                    <td class="text-capitalize">{{ user.last_name }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.role }}</td>
-                                    <td>{{ user.created_at }}</td>
+                                    <td>{{ branch.name }}</td>
+                                    <td>{{ branch.created_at }}</td>
                                     <td>
-                                        <a href="/update_company/{{ company.id }}" class="text-info mr-2"><i
-                                                class="fas fa-pencil-alt"></i> Edit</a>
-                                        <a href="/delete_company/{{ company.id }}" class="text-danger ml-2"><i
-                                                class="far fa-trash-alt"></i> Delete</a>
+                                        <a href="/companies/{{ company.id }}/branches/{{ branch.id }}"
+                                            class="text-info mr-2"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                        <a href="/companies/{{ company.id }}/branches/{{ branch.id }}/delete"
+                                            class="text-danger ml-2"><i class="far fa-trash-alt"></i> Delete</a>
+                                        <a href="/companies/{{ company.id }}/branches/{{ branch.id }}/view_branch"
+                                            class="text-success ml-2"><i class="fas fa-eye"></i>
+                                            View</a>
                                     </td>
+
                                 </tr>
                                 {% endfor %}
                             </tbody>

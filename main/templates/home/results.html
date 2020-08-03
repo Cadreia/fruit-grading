@@ -18,139 +18,144 @@ Results
         </div>
         {% endif %}
 
+        {% if not camera_grading %}
+        <div class="span12 d-flex justify-content-end align-items-end">
+            <a href="/companies/{{companyId}}/branches/{{branchId}}/view_branch"
+                class="btn btn-sm btn-outline secondary">Back to Branch</a>
+        </div>
+        {% endif %}
+
+        {% if camera_grading %}
+        <p style="display: none" class="is_camera_grading">{{ camera_grading }}</p>
+        <div class="span12 d-flex justify-content-end align-items-end">
+            <a href="/companies/{{companyId}}/branches/{{branch.id}}/view_branch"
+                class="btn btn-sm btn-outline secondary">Back to Branch</a>
+        </div>
+        {% endif %}
+
         {% if camera_grading %}
         <div class="row my-4">
             <div class="col-md-6 col-lg-6 mx-auto">
                 <div class="col-md-12 col-lg-12">
+                    <h4 class="text-center py-2">Branch: {{ branch.name }}</h4>
                     <h4 class="text-center py-2">Video Live Stream</h4>
                 </div>
                 <img height="auto" width="700" src="{% url 'detectWithCamera' %}">
+
             </div>
         </div>
-        <div><button id="showMainResults" class="btn btn-warning btn-sm text-uppercase mx-auto">Start
-                Grading</button></div>
         {% endif %}
 
-        <div class="mainResults" style="display: none">
+        <p class="branch-id" id="{{ branch.id }}"></p>
+        <p class="fruit-id" id="{{ fruit.id }}"></p>
+
+        <div class="mainResults" {% if camera_grading %} style="display: none;" {% endif %}>
             <div class="jumbotron">
-                <h4 class="text-center">Fruit: Orange</h4>
+                <h4 class="text-center text-capitalize">Fruit: {{ fruit.name }}</h4>
             </div>
+
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="user-profile p-3 mb-3">
-                                <h4 class="text-center user-name">Original Images</h4>
+                                <h4 class="text-center user-name">Original Image</h4>
                             </div>
                         </div>
 
                         <div class="col-md-6 col-lg-6">
                             <div class="card card-bordered">
                                 <div class="card-header text-center">
-                                    <h4>Left Side</h4>
+                                    <h4></h4>
                                 </div>
-                                <img class="img-fluid" height="250" width="250" src="{{ uploaded_file_url }}">
-                                <!-- <img class="img-fluid" height="200" width="200" src="{% static 'assets/images/tomatoes/tomat1.jpg' %}" alt="image-left"> -->
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6">
-                            <div class="card card-bordered">
-                                <div class="card-header text-center">
-                                    <h4>Right Side</h4>
-                                </div>
-                                <img class="img-fluid" height="250" width="250" src="{{ uploaded_file_url }}">
+                                <img class="img-fluid upload-img" height="250" width="250"
+                                    src="{{ uploaded_file_url }}">
+                                <!-- <img class="img-fluid" height="200" width="200" src="{% static 'assets/Image/tomatoes/tomat1.jpg' %}" alt="image-left"> -->
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="user-profile p-3 mb-3">
-                                <h4 class="text-center user-name">Edge Images</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-6">
-                            <div class="card card-bordered">
-                                <div class="card-header text-center">
-                                    <h4>Left Side</h4>
-                                </div>
-                                <img class="img-fluid" height="250" width="250" src="{{ colorStats.edge_file_url }}">
+                                <h4 class="text-center user-name">Edge Image</h4>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
                             <div class="card card-bordered">
                                 <div class="card-header text-center">
-                                    <h4>Right Side</h4>
+                                    <h4></h4>
                                 </div>
-                                <img class="img-fluid" height="250" width="250" src="{{ colorStats.edge_file_url }}">
+                                <img class="img-fluid cnt-img" height="250" width="250" src="{{ cnt_file_url }}">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="user-profile p-3 mb-3">
-                                <h4 class="text-center user-name">Red Mask Images</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-6">
-                            <div class="card card-bordered">
-                                <div class="card-header text-center">
-                                    <h4>Left Side</h4>
-                                </div>
-                                <img class="img-fluid" height="250" width="250" src="{{ colorStats.mask_file_url }}">
+                                <h4 class="text-center user-name">Detected Image</h4>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
                             <div class="card card-bordered">
                                 <div class="card-header text-center">
-                                    <h4>Right Side</h4>
+                                    <h4></h4>
                                 </div>
-                                <img class="img-fluid" height="250" width="250" src="{{ colorStats.mask_file_url }}">
+                                <img class="img-fluid edge-img" height="250" width="250" src="{{ edge_file_url }}">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="user-profile p-3 mb-3">
-                                <h4 class="text-center user-name">Segmented Images</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-6">
-                            <div class="card card-bordered">
-                                <div class="card-header text-center">
-                                    <h4>Left Side</h4>
-                                </div>
-                                <img class="img-fluid" height="250" width="250"
-                                    src="{{ colorStats.uploaded_file_url }}">
+                                <h4 class="text-center user-name">Cropped Image</h4>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
                             <div class="card card-bordered">
                                 <div class="card-header text-center">
-                                    <h4>Right Side</h4>
+                                    <h4></h4>
                                 </div>
-                                <img class="img-fluid" height="250" width="250"
-                                    src="{{ colorStats.uploaded_file_url }}">
+                                <img class="img-fluid cropped-img" height="250" width="250"
+                                    src="{{ cropped_file_url }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="user-profile p-3 mb-3">
+                                <h4 class="text-center user-name">Red Mask Image</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="card card-bordered">
+                                <div class="card-header text-center">
+                                    <h4></h4>
+                                </div>
+                                <img class="img-fluid mask-img" height="250" width="250" src="{{ mask_file_url }}">
                             </div>
                         </div>
                     </div>
 
                 </div>
                 <div class="col-md-6 px-5 py-2">
-                    <h4 class="display-1">PASS</h4>
-                    <h4>Ripe Percentage: {{ ripe_perc }}%
+                    {% if not camera_grading %}
+                    {% if overall_assessment == 'pass'%}
+                    <h4 class="display-1 py-3 text-uppercase text-center text-success">
+                        {{ overall_assessment }}
                     </h4>
-                    <h4>Ripe Rate: {{ ripe_rate }}
+                    {% endif %}
+                    {% if overall_assessment == 'fail'%}
+                    <h4 class="display-1 py-3 text-uppercase text-center text-danger">
+                        {{ overall_assessment }}
                     </h4>
-                    <h4>Defect: 3%
+                    {% endif %}
+                    {% endif %}
+                    {% if camera_grading %}
+                    <h4 class="display-1 py-3 text-uppercase text-center text-success overall_assessment">
+                        {{ overall_assessment }}
                     </h4>
-                    <h4>Size: Pass
-                    </h4>
-                    <h5>Shape: Fail
-                    </h5>
+                    {% endif %}
                     <div class="datatables datatable-dark mt-4">
                         <table class="table table-hover text-center">
                             <thead class="text-capitalize">
@@ -164,27 +169,16 @@ Results
                             <tbody>
                                 <tr>
                                     <td><b>Ripeness</b></td>
-                                    <td>{{ colorStats.ripe_perc }}%</td>
-                                    <td>{{ colorStats.ripe_rate }}</td>
-                                    <td>{{ colorStats.color_grade }}</td>
+                                    <td class="ripe_perc">{{  ripe_perc }}%</td>
+                                    <td class="ripe_rate">{{  ripe_rate }}</td>
+                                    <td class="color_grade">{{  color_grade }}</td>
                                 </tr>
-                                <tr>
-                                    <td><b>Defect</b></td>
-                                    <td>{{ colorStats.percentage_of_defects }}%</td>
-                                    <td>{{ colorStats.orange_grade }}</td>
-                                    <td>C</td>
-                                </tr>
+
                                 <tr>
                                     <td><b>Size</b></td>
-                                    <td></td>
-                                    <td>{{ sizeStats.size }}</td>
-                                    <td>{{ sizeStats.size_grade }}</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Shape</b></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td> --- </td>
+                                    <td class="size">{{ sizeStats.size }}</td>
+                                    <td class="size_grade">{{ sizeStats.size_grade }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -199,4 +193,50 @@ Results
 {% endblock %}
 {% block js_content %}
 <script src="{% static  'assets/js/vendor/jquery-2.2.4.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        var is_camera_grading = $('.is_camera_grading').text()
+        if (is_camera_grading == 'True') {
+            myFunction()
+            $("#showMainResults").click(function () {
+                $(".mainResults").show();
+            });
+            setInterval(myFunction, 20000);
+        }
+    });
+    function myFunction() {
+        $(".mainResults").show();
+        var branchIid = $('.branch-id').attr('id');
+        var fruitIid = $('.fruit-id').attr('id');
+        data = { 'branchIid': branchIid, 'fruitIid': fruitIid }
+
+        req = $.ajax({
+            url: '/startCamGrading',
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                if (data.uploaded_file_url) {
+                    $('.upload-img').fadeOut(1000).fadeIn(1000);
+                    $('.upload-img').attr('src', data.uploaded_file_url);
+                    $('.edge-img').fadeOut(1000).fadeIn(1000);
+                    $('.edge-img').attr('src', data.edge_file_url);
+                    $('.cnt-img').fadeOut(1000).fadeIn(1000);
+                    $('.cnt-img').attr('src', data.cnt_file_url);
+                    $('.mask-img').fadeOut(1000).fadeIn(1000);
+                    $('.mask-img').attr('src', data.mask_file_url);
+                    $('.cropped-img').fadeOut(1000).fadeIn(1000);
+                    $('.cropped-img').attr('src', data.cropped_file_url);
+                    $('.ripe_perc').text(data.ripe_perc);
+                    $('.ripe_rate').text(data.ripe_rate);
+                    $('.color_grade').text(data.color_grade);
+                    $('.size').text(data.sizeStats.size);
+                    $('.size_grade').text(data.sizeStats.size_grade);
+                }
+            },
+            error: function (data) {
+                console.log("Something went wrong!");
+            }
+        })
+    }
+</script>
 {% endblock %}

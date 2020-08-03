@@ -33,6 +33,24 @@ class CompanyManager(models.Manager):
 
         return errors
 
+class BranchManager(models.Manager):
+    def validator(self, postData):
+        errors = {}
+        if (postData['name'].isalpha()) == False:
+            if len(postData['name']) == 0:
+                errors['name'] = "Branch name can not be empty"
+
+        return errors
+
+class FruitManager(models.Manager):
+    def validator(self, postData):
+        errors = {}
+        if (postData['name'].isalpha()) == False:
+            if len(postData['name']) == 0:
+                errors['name'] = "Fruit name can not be empty"
+
+        return errors
+
 class User(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -46,26 +64,6 @@ class User(models.Model):
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['username', 'password']
-
-class ThiefLocation(models.Model):
-    name = models.CharField(max_length=255)
-    national_id = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    picture = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
-    latitude = models.CharField(max_length=255)
-    longitude = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-class Person(models.Model):
-    name = models.CharField(max_length=255)
-    national_id = models.CharField(max_length=255, default=None)
-    address = models.CharField(max_length=255)
-    picture = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
 class File(models.Model):
     file = models.FileField(blank=False, null=False)
@@ -86,19 +84,20 @@ class Branch(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = BranchManager()
 
 class Fruit(models.Model):
     name = models.CharField(max_length=255)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    branch = models.ManyToManyField(Branch)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = FruitManager()
 
 class Report(models.Model):
-    check_date = models.DateTimeField()
-    total_fruit_num = models.BigIntegerField()
-    total_size_def = models.BigIntegerField()
-    total_color_def = models.BigIntegerField()
-    total_texture_def = models.BigIntegerField()
+    check_date = models.DateField()
+    total_fruit_num = models.BigIntegerField(default=0)
+    total_def = models.BigIntegerField(default=0)
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

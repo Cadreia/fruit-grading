@@ -1,7 +1,7 @@
 {% extends "layout/base.html" %}
 
 {% block heading_content %}
-Create Company
+Update Fruit
 {% endblock heading_content %}
 
 {% block title_content %}
@@ -9,7 +9,7 @@ Companies
 {% endblock title_content %}
 
 {% block title_content2 %}
-Create Company
+Update Fruit
 {% endblock title_content2 %}
 
 {% block main_content %}
@@ -23,7 +23,7 @@ Create Company
                 <div class="col-12 mt-5">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="header-title">Add Company</h4>
+                            <h4 class="header-title">Update Fruit</h4>
                             {% if messages %}
                             <div class="span12">
                                 {% for message in messages %}
@@ -34,12 +34,12 @@ Create Company
                             </div>
                             {% endif %}
                             <br />
-                            <form method="post" action="/save_company">
+                            <form method="post" action="">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="example-text-input" class="col-form-label">Name</label>
-                                    <input class="form-control" name="name" type="text" id="example-text-input"
-                                        required>
+                                    <input class="form-control" name="name" type="text" id="example-text-input" required
+                                        value="{{ fruit.name }}">
                                 </div>
 
                                 <div class="form-group">

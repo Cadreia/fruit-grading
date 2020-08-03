@@ -63,6 +63,8 @@
                 <div class="menu-inner">
                     <nav>
                         <ul class="metismenu" id="menu">
+                            <li><a href="/home"><i class="ti-home"></i> <span>Home</span></a>
+                            </li>
                             <li>
                                 <a href="javascript:void(0)" aria-expanded="true"><i
                                         class="ti-layout-sidebar-left"></i><span>Users
@@ -83,24 +85,21 @@
                                     <li><a href="/view_companies">View Companies</a></li>
                                 </ul>
                             </li>
-                            <li><a href="/grade"><i class="ti-palette"></i> <span>Grade Fruit</span></a>
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i
+                                        class="ti-layout-sidebar-left"></i><span>Fruits
+                                    </span></a>
+                                <ul class="collapse">
+                                    <li><a href="/add_fruit">Add Fruit</a></li>
+                                    <li><a href="/view_fruits">View Fruits</a></li>
+                                </ul>
                             </li>
+
                             <li><a href="/results"><i class="ti-palette"></i> <span>Analysed Results</span></a>
                             </li>
                             <li>
                                 <a href="/reports"><i class="ti-pie-chart"></i><span>Reports</span></a>
                             </li>
-                            <li>
-                                <a href="javascript:void(0)" aria-expanded="true"><i
-                                        class="ti-slice"></i><span>Citizens</span></a>
-                                <ul class="collapse">
-                                    <li><a href="/add_citizen">Add Citizen</a></li>
-                                    <li><a href="/view_citizens">View Citizens</a></li>
-                                </ul>
-                            </li>
-
-
-
                         </ul>
                     </nav>
                 </div>
@@ -198,11 +197,7 @@
     <!-- others plugins -->
     <script src="{% static  'assets/js/plugins.js' %}"></script>
     <script src="{% static  'assets/js/scripts.js' %}"></script>
-    <script>
-        $("#showMainResults").click(function () {
-            $(".mainResults").show();
-        });
-    </script>
+
 </body>
 
 </html>

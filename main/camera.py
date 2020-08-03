@@ -4,7 +4,7 @@ from django.conf import settings
 
 class IPWebCam(object):
 	def __init__(self):
-		self.url = "http://10.216.2.121:8080/shot.jpg"
+		self.url = "http://192.168.1.3:8080/shot.jpg"
 
 
 	def __del__(self):

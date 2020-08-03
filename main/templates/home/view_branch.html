@@ -1,15 +1,15 @@
 {% extends "layout/base.html" %}
 
 {% block heading_content %}
-Create Company
+My Company's Branch
 {% endblock heading_content %}
 
 {% block title_content %}
-Companies
+View Companies / Branches
 {% endblock title_content %}
 
 {% block title_content2 %}
-Create Company
+View Branch
 {% endblock title_content2 %}
 
 {% block main_content %}
@@ -23,7 +23,10 @@ Create Company
                 <div class="col-12 mt-5">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="header-title">Add Company</h4>
+                            <h2 class="header-title text-center">
+                                <div class="mb-2">Company: {{ company.name }}</div>
+                                <div>Branch: {{ branch.name }}</div>
+                            </h2>
                             {% if messages %}
                             <div class="span12">
                                 {% for message in messages %}
@@ -34,18 +37,24 @@ Create Company
                             </div>
                             {% endif %}
                             <br />
-                            <form method="post" action="/save_company">
+
+                            <h4>Grade Your Fruit</h4>
+                            <form method="post" action="">
                                 {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="example-text-input" class="col-form-label">Name</label>
-                                    <input class="form-control" name="name" type="text" id="example-text-input"
-                                        required>
-                                </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <label for="example-text-input" class="col-form-label">Choose Fruit</label>
+                                    <select class="form-control" name="name" required id="exampleFormControlSelect1">
+                                        {% for fruit in fruits %}
+                                        <option>{{ fruit.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Start Grading</button>
                                 </div>
                             </form>
+
 
                         </div>
                     </div>

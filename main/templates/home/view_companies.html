@@ -9,7 +9,7 @@ Companies
 {% endblock title_content %}
 
 {% block title_content2 %}
-View Company
+View Companies
 {% endblock title_content2 %}
 
 {% block main_content %}
@@ -36,19 +36,23 @@ View Company
                                 <tr>
                                     <th>Name</th>
                                     <th>Creation Date: </th>
-                                    <th></th>
+                                    <th>Action</th>
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-capitalize">
                                 {% for company in companies %}
                                 <tr>
                                     <td>{{ company.name }}</td>
                                     <td>{{ company.created_at }}</td>
                                     <td>
-                                        <a href="#" class="text-info mr-2"><i class="fas fa-pencil-alt"></i> Edit</a>
-                                        <a href="#" class="text-danger ml-2"><i class="far fa-trash-alt"></i> Delete</a>
-                                        <a href="/add_branch" class="text-success ml-2"><i class="fas fa-plus-circle"></i> Add Branch</a>
+                                        <a href="/update_company/{{ company.id }}" class="text-info mr-2"><i
+                                                class="fas fa-pencil-alt"></i> Edit</a>
+                                        <a href="/delete_company/{{ company.id }}" class="text-danger ml-2"><i
+                                                class="far fa-trash-alt"></i> Delete</a>
+                                        <a href="/view_branches/{{ company.id }}" class="text-success ml-2"><i
+                                                class="fas fa-eye"></i>
+                                            View</a>
                                     </td>
 
                                 </tr>

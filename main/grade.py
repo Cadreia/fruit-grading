@@ -1,29 +1,16 @@
 from __future__ import division
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render, HttpResponse, redirect
-from django.contrib import messages
-from django.http.response import StreamingHttpResponse
 import bcrypt
 from PIL import Image, ImageDraw
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework import status
 from .serializers import FileSerializer
-from django.contrib.auth import logout
-from .forms import LoginForm, SignUpForm
-from main.models import User, Person, ThiefLocation
 from django.core.mail import EmailMessage
 from django.conf import settings
-from main.camera import IPWebCam
-from main.grade import *
 
 import io
 import os
 import random
 import cv2
 import numpy as np
-import time
 import requests
 from copy import deepcopy
 
@@ -38,7 +25,7 @@ area_of_specimen_2 = 0
 total_area_of_specimen = 0
 percentage_of_defects = 0
 orange_grade = ''
-sample = 3
+i = 1
 # define range of red color in HSV
 lower_red2 = np.array([170, 50, 50])
 upper_red2 = np.array([180, 255, 255])
@@ -68,11 +55,8 @@ def preProcess(image1):
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
-def gradeByColor(test_image):
-    #test_image = cv2.imread("../media/IMG_20200704_125357_057_2SLvqQx.jpg")
-    #test_image = cv2.imread(os.path.join(settings.PROJECT_ROOT, ".."+uploaded_file_url))
-
-    #img_size = gradeBySize(test_image)
+def gradeByColor(test_image, fruitName):
+    global i
 
     kernelOpen = np.ones((5, 5))
     kernelClose = np.ones((20, 20))
@@ -110,10 +94,18 @@ def gradeByColor(test_image):
     # cv2.imshow('Edges',edge_img)
 
     # save edge_img to /media
-    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/edge.jpg'), edge_img)
-    edge_file_url = '../media/edge.jpg'
+    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/cnt{}.jpg'.format(i)), edged)
+    cnt_file_url = '/media/cnt{}.jpg'.format(i)
+    print(cnt_file_url)
 
-    frame = edge_img
+    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/edge{}.jpg'.format(i)), edge_img)
+    edge_file_url = '/media/edge{}.jpg'.format(i)
+
+    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/cropped{}.jpg'.format(i)), croppedk)
+    cropped_file_url = '/media/cropped{}.jpg'.format(i)
+    print(cropped_file_url)
+
+    frame = croppedk
 
     # converting BGR to HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -129,15 +121,7 @@ def gradeByColor(test_image):
     # create a red HSV colour boundary and
     # threshold HSV image
     redmask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-
     redmask = redmask1+redmask2
-    maskOpen = cv2.morphologyEx(redmask, cv2.MORPH_OPEN, kernelOpen)
-    maskClose = cv2.morphologyEx(maskOpen, cv2.MORPH_CLOSE, kernelClose)
-
-    maskFinal = maskClose
-    # cv2.imshow('Red_Mask:',maskFinal)
-    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/mask.jpg'), maskFinal)
-    mask_file_url = '../media/mask.jpg'
 
     cnt_r = 0
     for r in redmask:
@@ -162,6 +146,23 @@ def gradeByColor(test_image):
         cnt_y = cnt_y+list(y).count(255)
     print("Yellowness ", cnt_y)
 
+    print(fruitName)
+    maskOpen = None
+    if fruitName == 'tomato':
+        maskOpen = cv2.morphologyEx(redmask, cv2.MORPH_OPEN, kernelOpen)
+    elif fruitName == 'apple':
+        maskOpen = cv2.morphologyEx(greenmask, cv2.MORPH_OPEN, kernelOpen)
+    elif fruitName == 'papaya' or fruitName == 'orange':
+        maskOpen = cv2.morphologyEx(yellowmask, cv2.MORPH_OPEN, kernelOpen)
+
+    maskClose = cv2.morphologyEx(maskOpen, cv2.MORPH_CLOSE, kernelClose)
+    maskFinal = maskClose
+    
+    # cv2.imshow('Red_Mask:',maskFinal)
+    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/mask{}.jpg'.format(i)), maskFinal)
+    mask_file_url = '/media/mask{}.jpg'.format(i)
+    print(mask_file_url)
+
     # Calculate ripeness
     tot_area = cnt_r+cnt_y+cnt_g
     rperc = cnt_r/tot_area
@@ -174,20 +175,54 @@ def gradeByColor(test_image):
     glimit = 0.4
     ripe_rate = ''
     ripe_perc = rperc * 100
+    orange_ripe_perc = yperc * 100
+    apple_ripe_perc = gperc * 100
     color_grade = ''
 
-    if ripe_perc < 30:
-        print("Low Ripeness")
-        ripe_rate = "Low Ripeness"
-        color_grade = "C"
-    elif ripe_perc > 30 and ripe_perc < 80:
-        print("Medium Ripeness")
-        ripe_rate = "Medium Ripeness"
-        color_grade = "B"
+    if fruitName == 'tomato':
+        if ripe_perc < 30:
+            ripe_rate = "Low Ripeness"
+            color_grade = "C"
+        elif ripe_perc > 30 and ripe_perc < 80:
+            ripe_rate = "Medium Ripeness"
+            color_grade = "B"
+        else:
+            ripe_rate = "High Ripeness"
+            color_grade = "A"
+    elif fruitName == 'orange':
+        if orange_ripe_perc < 30:
+            ripe_rate = "Low Ripeness"
+            color_grade = "C"
+        elif orange_ripe_perc > 30 and orange_ripe_perc < 80:
+            ripe_rate = "Medium Ripeness"
+            color_grade = "B"
+        else:
+            ripe_rate = "High Ripeness"
+            color_grade = "A"
+    elif fruitName == 'apple':
+        if apple_ripe_perc < 30:
+            ripe_rate = "Low Ripeness"
+            color_grade = "C"
+        elif apple_ripe_perc > 30 and apple_ripe_perc < 80:
+            ripe_rate = "Medium Ripeness"
+            color_grade = "B"
+        else:
+            ripe_rate = "High Ripeness"
+            color_grade = "A"
+    elif fruitName == 'papaya':
+        if orange_ripe_perc < 30:
+            ripe_rate = "Low Ripeness"
+            color_grade = "C"
+        elif orange_ripe_perc > 30 and orange_ripe_perc < 80:
+            ripe_rate = "Medium Ripeness"
+            color_grade = "B"
+        else:
+            ripe_rate = "High Ripeness"
+            color_grade = "A"
     else:
-        print("High Ripeness")
-        ripe_rate = "High Ripeness"
-        color_grade = "A"
+        pass
+
+    
 
     #cv2.imshow('FOriginal', test_image)
     #gradeByDefect(test_image)
@@ -196,9 +231,13 @@ def gradeByColor(test_image):
     #print("Image size: {}".format(img_size))
 
     color_context = {
+        'cnt_file_url': cnt_file_url,
         'edge_file_url': edge_file_url,
+        'cropped_file_url': cropped_file_url,
         'mask_file_url': mask_file_url,
         'ripe_perc': str(round(ripe_perc, 2)),
+        'orange_ripe_perc': str(round(orange_ripe_perc, 2)),
+        'apple_ripe_perc': str(round(apple_ripe_perc, 2)),
         'ripe_rate': ripe_rate,
         'color_grade': color_grade
         #'percentage_of_defects': str(round(percentage_of_defects, 2)),
