@@ -29,10 +29,14 @@ i = 1
 # define range of red color in HSV
 lower_red2 = np.array([170, 50, 50])
 upper_red2 = np.array([180, 255, 255])
+lower_red1 = np.array([0, 50, 50])
+upper_red1 = np.array([10, 255, 255])
 #orange_lower_1 = np.array([0, 150, 150])
 #orange_upper_1 = np.array([20, 255, 255])
+kernelOpen = np.ones((5, 5))
+kernelClose = np.ones((20, 20))
 
-def preProcess(image1):
+def preProcess2(image1):
     # at white background and also black backgorund for other parameters have to change======================
     gray = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(gray, 75, 255, cv2.THRESH_BINARY)
@@ -55,11 +59,31 @@ def preProcess(image1):
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
+def preProcess(image1):
+        # Convert image from BGR to HSV.
+    hsv = cv2.cvtColor(image1, cv2.COLOR_BGR2HSV)
+        # Define lower and upper boundaries of orange in HSV.
+        # HSV uses max values as H: 180, S: 255, V: 255 for HSV.
+        # This compares to the normal max values of H: 360, S: 100, V: 100.
+        # Setting upper and lower bounds for first mask.
+    mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
+    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+    redmask = mask1 + mask2
+        # Bitwise-AND mask and original image (combine the two).
+    result = cv2.bitwise_and(image1, image1, mask=redmask)
+    #maskOpen = cv2.morphologyEx(redmask, cv2.MORPH_OPEN, kernelOpen)
+    #maskClose = cv2.morphologyEx(maskOpen, cv2.MORPH_CLOSE, kernelClose)
+    #maskFinal = maskClose
+
+    cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/bitwise{}.jpg'.format(i)), result)
+
+    gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
+        # ret, thresh = cv2.threshold(gray, 127, 255, 3)
+    contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    return contours
+
 def gradeByColor(test_image, fruitName):
     global i
-
-    kernelOpen = np.ones((5, 5))
-    kernelClose = np.ones((20, 20))
 
     # resize image
     scale_percent = 10  # percent of original size
@@ -111,8 +135,6 @@ def gradeByColor(test_image, fruitName):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # define range of red color in HSV
-    lower_red1 = np.array([0, 50, 50])
-    upper_red1 = np.array([10, 255, 255])
 
     # create a red HSV colour boundary and
     # threshold HSV image
@@ -257,7 +279,7 @@ def gradeBySize(contours):
         if area > largest_area:
             largest_area = area
             largest_contour = contour
-    print("COntour Area is: {}".format(largest_area))
+    #print("COntour Area is: {}".format(largest_area))
     start_x, start_y, width, height = cv2.boundingRect(largest_contour)
     # print(start_x,start_y,width,height)
     # print("area of apple is ",width*height)
@@ -282,7 +304,7 @@ def gradeBySize(contours):
     # image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2RGB)
     # image2=Image.fromarray((image2).astype(np.uint8))
     # image2.save('out.jpg')
-    print("contour h*w: {}".format(width*height))
+    #print("contour h*w: {}".format(width*height))
     size_context = {
         'size': size,
         'size_grade': size_grade
@@ -291,38 +313,29 @@ def gradeBySize(contours):
 
 def gradeByDefect(prepImage, contours):
     # Grade orange
-    grade_img(prepImage, 1, contours)
-    grade_img(prepImage, 2, contours)
-    calculate_defect_grade()
+    grade_img(prepImage, contours)
+    defect_context = calculate_defect_grade()
+    return defect_context
 
 
-def grade_img(image1, number, contours):
+def grade_img(image1, contours):
     # cv2.drawContours(result, contours, -1, (0, 255, 0), 1).
     specimen_area_1 = 0
-    specimen_area_2 = 0
-    global number_of_defects
     global area_of_defects_1
-    global area_of_defects_2
-    global area_of_specimen_1
-    global area_of_specimen_2
+    area_of_defects_1 = 0
+    global area_of_specimen_1, i
     # Loop through the contours found in the image.
     for c in contours:
         # If contour area is big enough, then continue with loop.
         if cv2.contourArea(c) <= 1500:
             continue
         # Largest contour will be area of the specimen.
-        if number == 1:
-            if cv2.contourArea(c) > specimen_area_1:
-                specimen_area_1 = cv2.contourArea(c)
-                area_of_specimen_1 = specimen_area_1
-        elif number == 2:
-            if cv2.contourArea(c) > specimen_area_2:
-                specimen_area_2 = cv2.contourArea(c)
-                area_of_specimen_2 = specimen_area_2
-                print(area_of_specimen_2)
+        if cv2.contourArea(c) > specimen_area_1:
+            specimen_area_1 = cv2.contourArea(c)
+            area_of_specimen_1 = specimen_area_1
 
         # Add to number of defects.
-        number_of_defects += 1
+        
         # Get the location and radius of a cirlce that covers the contour area.
         (x, y), radius = cv2.minEnclosingCircle(c)
         # Set center and radius values.
@@ -331,18 +344,17 @@ def grade_img(image1, number, contours):
         # Draw circle on original image where contour was found.
         cv2.circle(image1, center, radius, (0, 255, 0), 10)
         # Add area of contours to the area_of_defects to get total area of defects.
-        if number == 1:
-            area_of_defects_1 += cv2.contourArea(c)
-        elif number == 2:
-            area_of_defects_2 += cv2.contourArea(c)
 
-    print("contour area is: {}".format(area_of_specimen_1))
+
+        cv2.imwrite(os.path.join(settings.PROJECT_ROOT, '../media/defect{}.jpg'.format(i)), image1)
+        defect_file_url = '/media/defect{}.jpg'.format(i)
+
+
+        area_of_defects_1 += cv2.contourArea(c)
+
 
     # Depending on which specimen is being analysed, save the image with suffix '1' or '2'.
-    if number == 1:
-        print("Image 1 analysed and saved")
-    elif number == 2:
-        print("Image 2 analysed and saved")
+    #print("Image 1 analysed and saved")
 
 
 def calculate_defect_grade():
@@ -350,28 +362,27 @@ def calculate_defect_grade():
     global orange_grade
     global total_area_of_specimen
     global area_of_specimen_1
-    global area_of_specimen_2
 
     # Total area of specimen.
-    total_area_of_specimen = (area_of_specimen_1 + area_of_specimen_2)
+    total_area_of_specimen = area_of_specimen_1
     # Total defected area.
-    total_area_of_defects = (area_of_defects_1 + area_of_defects_2)
+    total_area_of_defects = area_of_defects_1
     # Take total area from area of defects to get total area of defects.
     total_area_of_defects = total_area_of_defects - total_area_of_specimen
     # Work out percentage of defected area in relation to the area of the orange.
     #percentage_of_defects = (total_area_of_defects / total_area_of_specimen) * 100
     percentage_of_defects = (total_area_of_defects / total_area_of_specimen) * 100
-    print(percentage_of_defects)
     # Look at number of defects and area of defects of selected orange and grade the orange appropriately.
     if percentage_of_defects < 10:
         orange_grade = 'A'
-        print(orange_grade)
     elif percentage_of_defects > 10 and percentage_of_defects < 40:
         orange_grade = 'B'
-        print(orange_grade)
     else:
         orange_grade = 'C'
-        print(orange_grade)
-    print("Percentage Damaged: " + str(round(percentage_of_defects, 3)) + "%.")
     #ui.defects_label.setText("Number of Defects: " + str(number_of_defects) + '.')
-    print("Grade of Specimen " + str(orange_grade) + '.')
+
+    defect_context = {
+        'orange_grade': orange_grade,
+        'percentage_of_defects': percentage_of_defects
+    }
+    return defect_context

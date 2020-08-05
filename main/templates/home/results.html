@@ -41,7 +41,7 @@ Results
                     <h4 class="text-center py-2">Video Live Stream</h4>
                 </div>
                 <img height="auto" width="700" src="{% url 'detectWithCamera' %}">
-
+                <button class="btn btn-sm btn-warning">Stop Grading</button>
             </div>
         </div>
         {% endif %}
@@ -51,9 +51,19 @@ Results
 
         <div class="mainResults" {% if camera_grading %} style="display: none;" {% endif %}>
             <div class="jumbotron">
-                <h4 class="text-center text-capitalize">Fruit: {{ fruit.name }}</h4>
+                <h4 class="text-center text-capitalize">Fruit: {{ fruit.name }}</h4><br />
+                <h5 class="text-center text-capitalize">Total Checked: <span class="p-3"
+                        style="color: white; background-color: turquoise">5</span></h5>
             </div>
 
+            <div class="row d-flex justify-content-right align-items-right">
+                <div class="col-md-12 d-flex justify-content-end align-items-right">
+                    <a href="/companies/{{ companyId }}/branches/{{ branch.id }}/view_report" class="btn btn-sm"
+                        style="background-color: turquoise; color: white;"><i class="ti-eye"></i>
+                        View
+                        Daily Report</a>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-6">
@@ -201,7 +211,7 @@ Results
             $("#showMainResults").click(function () {
                 $(".mainResults").show();
             });
-            setInterval(myFunction, 20000);
+            setInterval(myFunction, 5000);
         }
     });
     function myFunction() {

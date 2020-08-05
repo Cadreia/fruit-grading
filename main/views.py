@@ -429,7 +429,7 @@ def checkFruit(request, branchId, fruitId):
         colorStats = gradeByColor(test_image, fruit.name)
         contours = preProcess(test_image)
         sizeStats = gradeBySize(contours)
-        #defectStats = gradeByDefect(test_image, contours)
+        defectStats = gradeByDefect(test_image, contours)
 
         ripe_perc = 0
         if fruit.name == 'tomato':
@@ -511,7 +511,7 @@ def startCamGrading(request):
     colorStats = gradeByColor(test_image, fruitname)
     contours = preProcess(test_image)
     sizeStats = gradeBySize(contours)
-    #defectStats = gradeByDefect(test_image, contours)
+    defectStats = gradeByDefect(test_image, contours)
 
     ripe_perc = 0
     if fruitname == 'tomato':
@@ -563,3 +563,31 @@ def startCamGrading(request):
     i += 1  
     #return render(request, 'home/results.html', context)
     return JsonResponse(context)
+
+def viewReport(request, companyId, branchId):
+    company_name = Company.objects.get(id = companyId).name
+    branch_name = Branch.objects.get(id = branchId).name
+    reports = Report.objects.filter(branch_id = branchId)
+    context = {
+        'reports': reports,
+        'company_name': company_name,
+        'branch_name': branch_name
+    }
+    return render(request, 'home/reports.html', context)
+
+
+
+from django.http import HttpResponse
+from django.views.generic import View
+from main.utils import render_to_pdf #created in step 4
+
+class GeneratePdf(View):
+    def get(self, request, *args, **kwargs):
+        data = {
+             'today': datetime.date(datetime.now()), 
+             'amount': 39.99,
+            'customer_name': 'Cooper Mann',
+            'order_id': 1233434,
+        }
+        pdf = render_to_pdf('home/reports.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')

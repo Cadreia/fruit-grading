@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 from main.views import FileView
 from . import views
+from .views import GeneratePdf
 
 urlpatterns = [
     url(r'^$', views.home),
@@ -25,6 +26,8 @@ urlpatterns = [
     url(r'^logout', views.logout_view),
     #url(r'^detectWithCamera', views.detectWithCamera),
     #url(r'^upload', FileView.as_view(), name='file-upload'),
+    url(r'^pdf/$', GeneratePdf.as_view()),
+
 
     path('update_company/<id>', views.updateCompany, name='updateCompany'),
     path('delete_company/<id>', views.deleteCompany, name='deleteCompany'),
@@ -40,7 +43,7 @@ urlpatterns = [
     path('update_fruit/<fruitId>', views.updateFruit, name='updateFruit'),
     path('delete_fruit/<fruitId>', views.deleteFruit, name='deleteFruit'),
     path('check_fruit/branch/<branchId>/fruit/<fruitId>', views.checkFruit, name='checkFruit'),
-
+    path('companies/<companyId>/branches/<branchId>/view_report', views.viewReport, name='viewReport'),
     path('gotoCamResults/branch/<branchId>/fruit/<fruitId>', views.gotoCamResults, name='gotoCamResults'),
     path('detectWithCamera', views.detectWithCamera, name='detectWithCamera'),
     path('startCamGrading', views.startCamGrading, name='startCamGrading'),

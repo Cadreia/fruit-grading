@@ -37,7 +37,15 @@ View Branch
                             </div>
                             {% endif %}
                             <br />
-
+                            <div class="row d-flex justify-content-right align-items-right">
+                                <div class="col-md-12 d-flex justify-content-end align-items-right">
+                                    <a href="/companies/{{ company.id }}/branches/{{ branch.id }}/view_report"
+                                        class="btn btn-sm" style="background-color: turquoise; color: white;"><i
+                                            class="ti-eye"></i>
+                                        View
+                                        Daily Report</a>
+                                </div>
+                            </div>
                             <h4>Grade Your Fruit</h4>
                             <form method="post" action="">
                                 {% csrf_token %}
