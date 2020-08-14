@@ -103,7 +103,7 @@ Results
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="user-profile p-3 mb-3">
-                                <h4 class="text-center user-name">Detected Image</h4>
+                                <h4 class="text-center user-name">Fruit Contour Image</h4>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
@@ -134,7 +134,7 @@ Results
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="user-profile p-3 mb-3">
-                                <h4 class="text-center user-name">Red Mask Image</h4>
+                                <h4 class="text-center user-name">Mask Image</h4>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
@@ -149,23 +149,9 @@ Results
 
                 </div>
                 <div class="col-md-6 px-5 py-2">
-                    {% if not camera_grading %}
-                    {% if overall_assessment == 'pass'%}
-                    <h4 class="display-1 py-3 text-uppercase text-center text-success">
+                    <h4 class="display-1 py-3 text-uppercase text-center text-{{asessment_style}} overall_assessment">
                         {{ overall_assessment }}
                     </h4>
-                    {% endif %}
-                    {% if overall_assessment == 'fail'%}
-                    <h4 class="display-1 py-3 text-uppercase text-center text-danger">
-                        {{ overall_assessment }}
-                    </h4>
-                    {% endif %}
-                    {% endif %}
-                    {% if camera_grading %}
-                    <h4 class="display-1 py-3 text-uppercase text-center text-success overall_assessment">
-                        {{ overall_assessment }}
-                    </h4>
-                    {% endif %}
                     <div class="datatables datatable-dark mt-4">
                         <table class="table table-hover text-center">
                             <thead class="text-capitalize">
@@ -190,6 +176,8 @@ Results
                                     <td class="size">{{ sizeStats.size }}</td>
                                     <td class="size_grade">{{ sizeStats.size_grade }}</td>
                                 </tr>
+
+
                             </tbody>
                         </table>
                     </div>
@@ -241,6 +229,9 @@ Results
                     $('.color_grade').text(data.color_grade);
                     $('.size').text(data.sizeStats.size);
                     $('.size_grade').text(data.sizeStats.size_grade);
+                    $('.defect_grade').text(data.defect_grade);
+                    $('.percentage_of_defects').text(data.percentage_of_defects);
+
                 }
             },
             error: function (data) {

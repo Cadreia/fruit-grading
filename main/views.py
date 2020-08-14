@@ -30,21 +30,8 @@ import time
 from datetime import datetime
 
 # initialize global variables
-number_of_defects = 0
-area_of_defects_1 = 0
-area_of_defects_2 = 0
-total_area_of_defects = 0
-area_of_specimen_1 = 0
-area_of_specimen_2 = 0
-total_area_of_specimen = 0
 percentage_of_defects = 0
-orange_grade = ''
-sample = 3
-# define range of red color in HSV
-lower_red2 = np.array([170, 50, 50])
-upper_red2 = np.array([180, 255, 255])
-#orange_lower_1 = np.array([0, 150, 150])
-#orange_upper_1 = np.array([20, 255, 255])
+asessment_style = ''
 i = 1
 
 
@@ -97,7 +84,7 @@ def index2(request):
                     request.session['role'] = user.role
 
                     messages.add_message(request, messages.INFO, 'Welcome to fruit quality detection system ' + user.first_name+' '+user.last_name)
-                    return redirect(success)
+                    return redirect(dashboard)
                 else:
                     messages.error(request, 'Oops, Wrong password, please try a diffrerent one')
                     return redirect('/login')
@@ -176,7 +163,11 @@ def logout_view(request):
 
 
 def dashboard(request):
-    return render(request, 'home/dashboard.html')
+    users = User.objects.all()
+    context = {
+        'users': users
+    }
+    return render(request, 'home/dashboard.html', context)
 
 
 def viewUsers(request):
@@ -405,6 +396,7 @@ def checkFruit(request, branchId, fruitId):
     global context, show_main_results
     fruit = Fruit.objects.get(id = fruitId)
     overall_assessment = ''
+    assessment_style = ''
     companyId = Branch.objects.get(id = branchId).company_id
 
     # This is an example of processing a single image in order to grade it
@@ -427,9 +419,8 @@ def checkFruit(request, branchId, fruitId):
         test_image = cv2.imread(os.path.join(settings.PROJECT_ROOT, ".."+uploaded_file_url))
         
         colorStats = gradeByColor(test_image, fruit.name)
-        contours = preProcess(test_image)
+        contours = preProcess(test_image, fruit.name)
         sizeStats = gradeBySize(contours)
-        defectStats = gradeByDefect(test_image, contours)
 
         ripe_perc = 0
         if fruit.name == 'tomato':
@@ -441,9 +432,12 @@ def checkFruit(request, branchId, fruitId):
 
         if colorStats["color_grade"] == 'C' or colorStats["color_grade"] == 'B' or sizeStats["size_grade"] == 'C':
             overall_assessment = 'fail'
+            asessment_style = 'danger'
         else:
             overall_assessment = 'pass'
+            asessment_style = 'success'
 
+        print("assessment_style: " + asessment_style)
         context = {
             'edge_file_url': colorStats["edge_file_url"],
             'mask_file_url': colorStats["mask_file_url"],
@@ -457,7 +451,8 @@ def checkFruit(request, branchId, fruitId):
             'fruit': fruit,
             'companyId': companyId,
             'branchId': branchId,
-            'overall_assessment': overall_assessment
+            'overall_assessment': overall_assessment,
+            'asessment_style': asessment_style,
         }
         return render(request, 'home/results.html', context)
 
@@ -494,6 +489,7 @@ def startCamGrading(request):
     total_fruit_num = 0
     total_def = 0
     overall_assessment = ''
+    assessment_style = ''
     branchId = request.GET['branchIid']
     fruitId = request.GET['fruitIid']
     fruitname = Fruit.objects.get(id = fruitId).name
@@ -509,9 +505,9 @@ def startCamGrading(request):
     test_image = cv2.imread(os.path.join(settings.PROJECT_ROOT, ".."+fruit_img_url))
 
     colorStats = gradeByColor(test_image, fruitname)
-    contours = preProcess(test_image)
+    contours = preProcess(test_image, fruitname)
     sizeStats = gradeBySize(contours)
-    defectStats = gradeByDefect(test_image, contours)
+    #defectStats = gradeByDefect(test_image, contours)
 
     ripe_perc = 0
     if fruitname == 'tomato':
@@ -524,8 +520,10 @@ def startCamGrading(request):
     if colorStats["color_grade"] == 'C' or colorStats["color_grade"] == 'B' or sizeStats["size_grade"] == 'C':
         overall_assessment = 'fail'
         total_def += 1
+        asessment_style = 'danger'
     else:
         overall_assessment = 'pass'
+        asessment_style = 'success'
 
     # update report entry if it already exists
     if (Report.objects.filter(check_date = today_date, branch_id = branchId, fruit_id = fruitId).exists()):
@@ -547,7 +545,8 @@ def startCamGrading(request):
         total_def = total_def
         )
         report.save()
-
+    
+    print("asessment_style: " + asessment_style)
     context = {
             'edge_file_url': colorStats["edge_file_url"],
             'cnt_file_url': colorStats["cnt_file_url"],
@@ -557,8 +556,9 @@ def startCamGrading(request):
             'ripe_rate': colorStats["ripe_rate"],
             'color_grade': colorStats["color_grade"],
             'overall_assessment': overall_assessment,
+            'asessment_style': asessment_style,
             'sizeStats': sizeStats,
-            'uploaded_file_url': fruit_img_url
+            'uploaded_file_url': fruit_img_url,
         }
     i += 1  
     #return render(request, 'home/results.html', context)
@@ -568,10 +568,12 @@ def viewReport(request, companyId, branchId):
     company_name = Company.objects.get(id = companyId).name
     branch_name = Branch.objects.get(id = branchId).name
     reports = Report.objects.filter(branch_id = branchId)
+    pie_data = Report.objects.filter(check_date = datetime.date(datetime.now()), branch_id = branchId)[0]
     context = {
         'reports': reports,
         'company_name': company_name,
-        'branch_name': branch_name
+        'branch_name': branch_name,
+        'pie_data': pie_data
     }
     return render(request, 'home/reports.html', context)
 

@@ -55,9 +55,9 @@ Grade
                                         <div class="modal-footer">
                                             <a type="button" class="btn btn-outline-secondary"
                                                 data-dismiss="modal">Close</a>
-                                            <button type="submit" class="btn btn-primary"><span
-                                                    class="spinner-border spinner-border-sm" role="status"
-                                                    aria-hidden="true"></span>
+                                            <button type="submit" class="btn btn-primary process"><span
+                                                    class="spinner-border spinner-border-sm spin" style="display: none"
+                                                    role="status" aria-hidden="true"></span>
                                                 Process</button>
 
                                         </div>
@@ -126,4 +126,9 @@ Grade
 {% endblock %}
 {% block js_content %}
 <script src="{% static  'assets/js/vendor/jquery-2.2.4.min.js' %}"></script>
+<script>
+    $(".process").click(function () {
+        $(".spin").show();
+    });
+</script>
 {% endblock %}

@@ -24,15 +24,17 @@ area_of_specimen_1 = 0
 area_of_specimen_2 = 0
 total_area_of_specimen = 0
 percentage_of_defects = 0
-orange_grade = ''
+defect_grade = ''
 i = 1
 # define range of red color in HSV
 lower_red2 = np.array([170, 50, 50])
 upper_red2 = np.array([180, 255, 255])
 lower_red1 = np.array([0, 50, 50])
 upper_red1 = np.array([10, 255, 255])
-#orange_lower_1 = np.array([0, 150, 150])
-#orange_upper_1 = np.array([20, 255, 255])
+lower_yellow = np.array([20, 50, 50])
+upper_yellow = np.array([30, 255, 255])
+lower_green = np.array([31, 50, 50])
+upper_green = np.array([78, 255, 255])
 kernelOpen = np.ones((5, 5))
 kernelClose = np.ones((20, 20))
 
@@ -59,18 +61,25 @@ def preProcess2(image1):
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
-def preProcess(image1):
+def preProcess3(image1, fruitName):
         # Convert image from BGR to HSV.
     hsv = cv2.cvtColor(image1, cv2.COLOR_BGR2HSV)
         # Define lower and upper boundaries of orange in HSV.
         # HSV uses max values as H: 180, S: 255, V: 255 for HSV.
         # This compares to the normal max values of H: 360, S: 100, V: 100.
         # Setting upper and lower bounds for first mask.
-    mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
-    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-    redmask = mask1 + mask2
+    mask = None
+    if fruitName == 'apple':
+        mask = cv2.inRange(hsv, lower_green, upper_green)
+    elif fruitName == 'papaya' or fruitName == 'orange':
+        mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+    else:
+        mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
+        mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+        mask = mask1 + mask2
+    
         # Bitwise-AND mask and original image (combine the two).
-    result = cv2.bitwise_and(image1, image1, mask=redmask)
+    result = cv2.bitwise_and(image1, image1, mask=mask)
     #maskOpen = cv2.morphologyEx(redmask, cv2.MORPH_OPEN, kernelOpen)
     #maskClose = cv2.morphologyEx(maskOpen, cv2.MORPH_CLOSE, kernelClose)
     #maskFinal = maskClose
@@ -81,6 +90,29 @@ def preProcess(image1):
         # ret, thresh = cv2.threshold(gray, 127, 255, 3)
     contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return contours
+
+def preProcess(test_image, fruitName):
+# resize image
+    scale_percent = 10  # percent of original size
+    width = int(test_image.shape[1] * scale_percent / 100)
+    height = int(test_image.shape[0] * scale_percent / 100)
+    dim = (width, height)
+    imgOriginalScene = cv2.resize(test_image, dim, interpolation=cv2.INTER_AREA)
+
+    #cv2.imwrite(i+'.jpeg', test_image)
+
+    frame = test_image
+    edge_img = deepcopy(test_image)
+
+    # finds edges in the input image image and
+    # marks them in the output map edges
+    edged = cv2.Canny(edge_img, 50, 100)
+    edged = cv2.dilate(edged, None, iterations=1)
+    edged = cv2.erode(edged, None, iterations=1)
+
+    # find contours in the edge map
+    cnts, h = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    return cnts
 
 def gradeByColor(test_image, fruitName):
     global i
@@ -105,6 +137,9 @@ def gradeByColor(test_image, fruitName):
 
     # find contours in the edge map
     cnts, h = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+
+    
 
     max_contA = cv2.contourArea(cnts[0])
     max_cont = max(cnts, key=cv2.contourArea)
@@ -150,8 +185,7 @@ def gradeByColor(test_image, fruitName):
         cnt_r = cnt_r+list(r).count(255)
     print("Redness ", cnt_r)
 
-    lower_green = np.array([50, 50, 50])
-    upper_green = np.array([70, 255, 255])
+
     greenmask = cv2.inRange(hsv, lower_green, upper_green)
     # cv2.imshow('Green_Mask:',greenmask)
     cnt_g = 0
@@ -159,8 +193,7 @@ def gradeByColor(test_image, fruitName):
         cnt_g = cnt_g+list(g).count(255)
     print("Greenness ", cnt_g)
 
-    lower_yellow = np.array([20, 50, 50])
-    upper_yellow = np.array([30, 255, 255])
+
     yellowmask = cv2.inRange(hsv, lower_yellow, upper_yellow)
     # cv2.imshow('Yellow_Mask:',yellowmask)
     cnt_y = 0
@@ -200,6 +233,7 @@ def gradeByColor(test_image, fruitName):
     orange_ripe_perc = yperc * 100
     apple_ripe_perc = gperc * 100
     color_grade = ''
+    print(yperc)
 
     if fruitName == 'tomato':
         if ripe_perc < 30:
@@ -248,7 +282,7 @@ def gradeByColor(test_image, fruitName):
 
     #cv2.imshow('FOriginal', test_image)
     #gradeByDefect(test_image)
-    #print(orange_grade)
+    #print(defect_grade)
     #print(percentage_of_defects)
     #print("Image size: {}".format(img_size))
 
@@ -263,7 +297,7 @@ def gradeByColor(test_image, fruitName):
         'ripe_rate': ripe_rate,
         'color_grade': color_grade
         #'percentage_of_defects': str(round(percentage_of_defects, 2)),
-        #'orange_grade': orange_grade
+        #'defect_grade': defect_grade
         #'img_size': img_size
     }
     return color_context
@@ -285,6 +319,7 @@ def gradeBySize(contours):
     # print("area of apple is ",width*height)
     size = -1
     size_grade = ''
+    print(largest_area)
     if((largest_area) <= 64000):
         size = "SMALL"
         size_grade = "C"
@@ -359,7 +394,7 @@ def grade_img(image1, contours):
 
 def calculate_defect_grade():
     global percentage_of_defects
-    global orange_grade
+    global defect_grade
     global total_area_of_specimen
     global area_of_specimen_1
 
@@ -373,16 +408,16 @@ def calculate_defect_grade():
     #percentage_of_defects = (total_area_of_defects / total_area_of_specimen) * 100
     percentage_of_defects = (total_area_of_defects / total_area_of_specimen) * 100
     # Look at number of defects and area of defects of selected orange and grade the orange appropriately.
-    if percentage_of_defects < 10:
-        orange_grade = 'A'
-    elif percentage_of_defects > 10 and percentage_of_defects < 40:
-        orange_grade = 'B'
+    if percentage_of_defects < 0.3:
+        defect_grade = 'A'
+    elif percentage_of_defects > 0.3 and percentage_of_defects < 1:
+        defect_grade = 'B'
     else:
-        orange_grade = 'C'
+        defect_grade = 'C'
     #ui.defects_label.setText("Number of Defects: " + str(number_of_defects) + '.')
 
     defect_context = {
-        'orange_grade': orange_grade,
-        'percentage_of_defects': percentage_of_defects
+        'defect_grade': defect_grade,
+        'percentage_of_defects': str(round(percentage_of_defects, 2))
     }
     return defect_context

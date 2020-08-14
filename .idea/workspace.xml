@@ -6,7 +6,7 @@
       <change beforePath="$PROJECT_DIR$/AUTHORS.rst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/CONTRIBUTING.rst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README_Simplified_Chinese.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/crimedetec/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/crimedetec/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quality-checking/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/quality-checking/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/migrations/0001_initial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/templates/home/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/main/templates/home/welcome.html" afterDir="false" />
@@ -53,10 +53,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/crimedetec$identify_and_draw_boxes_on_faces.coverage" NAME="identify_and_draw_boxes_on_faces Coverage Results" MODIFIED="1555949136348" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
-    <SUITE FILE_PATH="coverage/crimedetec$webstest.coverage" NAME="webstest Coverage Results" MODIFIED="1557690981997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/crimedetec$facerec_from_video_file.coverage" NAME="facerec_from_video_file Coverage Results" MODIFIED="1557691501520" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
-    <SUITE FILE_PATH="coverage/crimedetec$facerec_from_webcam.coverage" NAME="facerec_from_webcam Coverage Results" MODIFIED="1557739115766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
+    <SUITE FILE_PATH="coverage/quality-checking$identify_and_draw_boxes_on_faces.coverage" NAME="identify_and_draw_boxes_on_faces Coverage Results" MODIFIED="1555949136348" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
+    <SUITE FILE_PATH="coverage/quality-checking$webstest.coverage" NAME="webstest Coverage Results" MODIFIED="1557690981997" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/quality-checking$facerec_from_video_file.coverage" NAME="facerec_from_video_file Coverage Results" MODIFIED="1557691501520" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
+    <SUITE FILE_PATH="coverage/quality-checking$facerec_from_webcam.coverage" NAME="facerec_from_webcam Coverage Results" MODIFIED="1557739115766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
@@ -116,7 +116,7 @@
   </component>
   <component name="RunManager" selected="Python.identify_and_draw_boxes_on_faces">
     <configuration name="facerec_from_video_file" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="crimedetec" />
+      <module name="quality-checking" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -138,7 +138,7 @@
       <method v="2" />
     </configuration>
     <configuration name="facerec_from_webcam" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="crimedetec" />
+      <module name="quality-checking" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -160,7 +160,7 @@
       <method v="2" />
     </configuration>
     <configuration name="identify_and_draw_boxes_on_faces" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="crimedetec" />
+      <module name="quality-checking" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -182,7 +182,7 @@
       <method v="2" />
     </configuration>
     <configuration name="webstest" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="crimedetec" />
+      <module name="quality-checking" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -203,13 +203,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="crimedetec" type="Python.DjangoServer" factoryName="Django server">
-      <module name="crimedetec" />
+    <configuration name="quality-checking" type="Python.DjangoServer" factoryName="Django server">
+      <module name="quality-checking" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DJANGO_SETTINGS_MODULE" value="crimedetec.settings" />
+        <env name="DJANGO_SETTINGS_MODULE" value="quality-checking.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
